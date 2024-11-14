@@ -963,7 +963,6 @@ END
     print $spec <<END;
 Summary:        $summary
 License:        $license
-Group:          Development/Libraries
 URL:            $url
 Source0:        $source
 BuildRoot:      \%{_tmppath}/\%{name}-\%{version}-\%{release}-root-\%(\%{__id_u} -n)
