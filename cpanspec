@@ -848,27 +848,25 @@ for my $file (@args) {
             # docs, cross referenced with the list of licenses in
             # /usr/share/rpmlint/config.
             if ($meta->{license} =~ /^perl$/i) {
-                $license="GPL+ or Artistic";
+                $license="GPL-1.0-or-later OR Artistic-1.0-Perl";
             } elsif ($meta->{license} =~ /^apache$/i) {
-                $license="Apache Software License";
+                $license="Apache-2.0";
             } elsif ($meta->{license} =~ /^artistic$/i) {
-                $license="Artistic";
+                $license="Artistic-1.0-Perl";
             } elsif ($meta->{license} =~ /^artistic_?2$/i) {
-                $license="Artistic 2.0";
+                $license="Artistic-2.0";
             } elsif ($meta->{license} =~ /^bsd$/i) {
                 $license="BSD";
             } elsif ($meta->{license} =~ /^gpl$/i) {
-                $license="GPL+";
+                $license="GPL-1.0-or-later";
             } elsif ($meta->{license} =~ /^lgpl$/i) {
-                $license="LGPLv2+";
+                $license="LGPL-2.0-or-later";
             } elsif ($meta->{license} =~ /^mit$/i) {
                 $license="MIT";
             } elsif ($meta->{license} =~ /^mozilla$/i) {
-                $license="MPL";
+                $license="MPL-1.0";
             } elsif ($meta->{license} =~ /^open_source$/i) {
-                $license="OSI-Approved"; # rpmlint will complain
-            } elsif ($meta->{license} =~ /^unrestricted$/i) {
-                $license="Distributable";
+                $license="any-OSI"; # rpmlint will complain
             } elsif ($meta->{license} =~ /^restrictive$/i) {
                 $license="Non-distributable";
                 warn "License is 'restrictive'."
@@ -888,7 +886,7 @@ for my $file (@args) {
             $license.=", see @licenses";
         }
     }
-    $license="CHECK(GPL+ or Artistic)" if (!$license);
+    $license="CHECK(GPL-1.0-or-later OR Artistic-1.0-Perl)" if (!$license);
 
     my $usebuildpl=0;
     if (grep /^Build\.PL$/, @files) {
