@@ -1158,11 +1158,6 @@ END
 
     print $spec <<END;
 
-\%clean
-rm -rf $macro{buildroot}@{[
-    (@filter_requires ? ' %{__perl_requires}' : '') .
-    (@filter_provides ? ' %{__perl_provides}' : '')]}
-
 \%files
 \%defattr(-,root,root,-)
 \%doc @doc
