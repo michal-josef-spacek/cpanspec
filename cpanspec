@@ -965,7 +965,6 @@ Summary:        $summary
 License:        $license
 URL:            $url
 Source0:        $source
-BuildRoot:      \%{_tmppath}/\%{name}-\%{version}-\%{release}-root-\%(\%{__id_u} -n)
 END
 
     printf $spec "%-16s%s\n", "BuildArch:", "noarch" if ($noarch);
