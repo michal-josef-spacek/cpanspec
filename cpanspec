@@ -847,7 +847,7 @@ for my $file (@args) {
         next;
     }
 
-    print $spec qq[\%{!?perl_$vendorlib: \%define perl_$vendorlib \%(eval "\`\%{__perl} -V:install$vendorlib\`"; echo \$install$vendorlib)}\n\n]
+    print $spec qq[\%{!?perl_$vendorlib: \%define perl_$vendorlib \%(eval "\`perl -V:install$vendorlib\`"; echo \$install$vendorlib)}\n\n]
         if ($compat);
 
     my $license="";
@@ -1058,7 +1058,7 @@ END
 
     if (!$compat) {
         print $spec <<END;
-Requires:       perl(:MODULE_COMPAT_\%(eval "`\%{__perl} -V:version`"; echo \$version))
+Requires:       perl(:MODULE_COMPAT_\%(eval "`perl -V:version`"; echo \$version))
 END
     }
 
@@ -1125,16 +1125,16 @@ END
 
     if ($usebuildpl) {
         print $spec <<END;
-\%{__perl} Build.PL --installdirs=vendor@{[$noarch ? '' : qq{ --optimize="$macro{optimize}"} ]}
+perl Build.PL --installdirs=vendor@{[$noarch ? '' : qq{ --optimize="$macro{optimize}"} ]}
 ./Build
 END
     } else {
         print $spec <<END;
-\%{__perl} Makefile.PL INSTALLDIRS=vendor@{[$noarch ? '' : qq{ OPTIMIZE="$macro{optimize}"}]}
+perl Makefile.PL INSTALLDIRS=vendor@{[$noarch ? '' : qq{ OPTIMIZE="$macro{optimize}"}]}
 END
 
         print $spec
-            "\%{__perl} -pi -e 's/^\\tLD_RUN_PATH=[^\\s]+\\s*/\\t/' Makefile\n"
+            "perl -pi -e 's/^\\tLD_RUN_PATH=[^\\s]+\\s*/\\t/' Makefile\n"
             if ($compat and !$noarch);
 
         print $spec <<END;
