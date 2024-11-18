@@ -741,6 +741,42 @@ for my $file (@args) {
             and $_ ne "autobuild.sh"
             and $_ ne "pm_to_blib"
             and $_ ne "install.sh"
+            # License files
+            and $_ ne "LICENSE"
+            and $_ ne "LICENCE"
+            and $_ ne "Copying"
+            and $_ ne "COPYING"
+            and $_ ne "COPYING.Artistic"
+            and $_ ne "COPYING.GNU"
+            and $_ ne "COPYRIGHT"
+            and $_ ne "ARTISTIC.txt"
+            and $_ ne "Artistic"
+            and $_ ne "Artistic.txt"
+            and $_ ne "GNU_GPL.txt"
+            and $_ ne "GNU_LGPL.txt"
+            and $_ ne "GPL"
+            and $_ ne "GPLv1"
+            and $_ ne "GPL2.txt"
+            and $_ ne "DISCLAIMER.txt"
+            } @files;
+
+    my @license=sort { $a cmp $b } grep {
+               $_ eq "LICENSE"
+            or $_ eq "LICENCE"
+            or $_ eq "Copying"
+            or $_ eq "COPYING"
+            or $_ eq "COPYING.Artistic"
+            or $_ eq "COPYING.GNU"
+            or $_ eq "COPYRIGHT"
+            or $_ eq "ARTISTIC.txt"
+            or $_ eq "Artistic"
+            or $_ eq "Artistic.txt"
+            or $_ eq "GNU_GPL.txt"
+            or $_ eq "GNU_LGPL.txt"
+            or $_ eq "GPL"
+            or $_ eq "GPLv1"
+            or $_ eq "GPL2.txt"
+            or $_ eq "DISCLAIMER.txt"
             } @files;
 
     my $date=strftime("%a %b %d %Y", localtime);
@@ -1161,6 +1197,7 @@ END
 \%files
 \%defattr(-,root,root,-)
 \%doc @doc
+\%license @license
 END
 
     if ($scripts) {
