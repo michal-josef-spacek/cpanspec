@@ -1195,7 +1195,6 @@ END
     print $spec <<END;
 
 \%files
-\%defattr(-,root,root,-)
 \%doc @doc
 \%license @license
 END
