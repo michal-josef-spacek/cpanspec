@@ -1013,6 +1013,9 @@ END
         delete $requires{perl};
     }
 
+    if (! $usebuildpl) {
+        printf $spec "%-16s%s\n", "BuildRequires:", 'make';
+    }
     if (defined($build_requires{perl})) {
         $build_requires{perl} =~ s/^[<>=]+ *//;
         # Convert decimal version to dotted
