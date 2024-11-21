@@ -1067,12 +1067,6 @@ END
         printf $spec "%-16s%s\n", "Requires:", $dep;
     }
 
-    if (!$compat) {
-        print $spec <<END;
-Requires:       perl(:MODULE_COMPAT_\%(eval "`perl -V:version`"; echo \$version))
-END
-    }
-
     for my $prov (@add_provides) {
         printf $spec "%-16s%s\n", "Provides:", $prov;
     }
