@@ -1015,9 +1015,17 @@ END
 
     if (defined($build_requires{perl})) {
         $build_requires{perl} =~ s/^[<>=]+ *//;
-        printf $spec "%-16s%s >= %s\n", "BuildRequires:", "perl",
-            (($build_requires{perl} lt "5.6.0" ? "0:" : "1:")
-            . $build_requires{perl}) if $build_requires{perl};
+        # Convert decimal version to dotted
+        if ($build_requires{perl} =~ /^(\d+)\.(\d{3})(\d{3})?/) {
+            $build_requires{perl} = int($1).'.'.int($2);
+            if ($3) {
+                $build_requires{perl} .= '.'.int($3);
+            } else {
+                $build_requires{perl} .= '.0';
+            }
+        }
+        printf $spec "%-16s%s >= %s\n", "BuildRequires:", "perl(:VERSION)", $build_requires{perl}
+            if $build_requires{perl};
         delete $build_requires{perl};
     }
 
