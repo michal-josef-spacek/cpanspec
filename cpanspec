@@ -1143,7 +1143,7 @@ perl Build.PL --installdirs=vendor@{[$noarch ? '' : qq{ --optimize="$macro{optim
 END
     } else {
         print $spec <<END;
-perl Makefile.PL INSTALLDIRS=vendor@{[$noarch ? '' : qq{ OPTIMIZE="$macro{optimize}"}]}
+perl Makefile.PL INSTALLDIRS=vendor@{[$noarch ? '' : qq{ OPTIMIZE="$macro{optimize}"}]} NO_PACKLIST=1 NO_PERLLOCAL=1
 END
 
         print $spec
@@ -1151,7 +1151,7 @@ END
             if ($compat and !$noarch);
 
         print $spec <<END;
-make \%{?_smp_mflags}
+%{make_build}
 END
     }
 
