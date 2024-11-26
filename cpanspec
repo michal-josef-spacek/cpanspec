@@ -1064,9 +1064,11 @@ END
 
     for my $dep (sort(keys(%requires))) {
         next if (!$compat and exists($corelist{$dep}));
-        printf $spec "%-16s%s", "Requires:", "perl($dep)";
-        print $spec (" >= " . $requires{$dep}) if ($requires{$dep});
-        print $spec "\n";
+        if ($requires{$dep}) {
+            printf $spec "%-16s%s", "Requires:", "perl($dep)";
+            print $spec (" >= " . $requires{$dep});
+            print $spec "\n";
+        }
     }
 
     for my $dep (@add_requires) {
