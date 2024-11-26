@@ -1158,8 +1158,6 @@ END
     print $spec <<END;
 
 \%install
-rm -rf $macro{buildroot}
-
 END
 
     if ($usebuildpl) {
@@ -1167,9 +1165,7 @@ END
             "./Build install --destdir=$macro{buildroot} --create_packlist=0\n";
     } else {
         print $spec <<END;
-make pure_install PERL_INSTALL_ROOT=$macro{buildroot}
-
-find $macro{buildroot} -type f -name .packlist -exec rm -f {} \\;
+%{make_install}
 END
     }
 
@@ -1180,8 +1176,6 @@ END
 }
 
     print $spec <<END;
-find $macro{buildroot} -depth -type d -exec rmdir {} 2>/dev/null \\;
-
 \%{_fixperms} $macro{buildroot}/*
 
 END
