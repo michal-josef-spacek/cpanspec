@@ -1209,8 +1209,13 @@ END
 
 \%files
 \%doc @doc
+END
+
+    if (@license) {
+            print $spec <<END;
 \%license @license
 END
+    }
 
     if ($scripts) {
         print $spec "\%{_bindir}/*\n";
