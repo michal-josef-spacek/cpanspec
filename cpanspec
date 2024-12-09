@@ -260,6 +260,14 @@ my @MACROS = (
 # this is set after the parameters are passed
 our %macro;
 
+# Module install requires.
+# XXX not full list
+my %module_install_build_requires = (
+    'author_requires' => 'Module::Install::AuthorRequires',
+    'readme_from' => 'Module::Install::ReadmeFromPod',
+    'recursive_author_tests' => 'Module::Install::AuthorTests',
+);
+
 sub print_version {
     print "$NAME version $VERSION\n";
     exit 0;
@@ -928,14 +936,27 @@ for my $file (@args) {
     $license="CHECK(GPL-1.0-or-later OR Artistic-1.0-Perl)" if (!$license);
 
     my $usebuildpl=0;
+    my $use_module_install=0;
     if (grep /^Build\.PL$/, @files) {
         $build_requires{'Module::Build'}=0;
         $usebuildpl=1;
     } else {
-        $build_requires{'ExtUtils::MakeMaker'}=0;
+        my $makefile_pl = extract($archive, $type, "$path/Makefile.PL")
+           or warn "Failed to extract $path/Makefile.PL";
+        if ($makefile_pl =~ m/use\s+inc::Module::Install/ms) {
+           $use_module_install=1;
+           $build_requires{'inc::Module::Install'}=1.06;
+           foreach my $module_install_build_require (keys %module_install_build_requires) {
+             if ($makefile_pl =~ m/$module_install_build_require/ms) {
+               $build_requires{$module_install_build_requires{$module_install_build_require}}=0;
+             }
+           }
+        } else {
+           $build_requires{'ExtUtils::MakeMaker'}=0;
+        }
     }
 
-    if (!$usebuildpl) {
+    if (!$usebuildpl && !$use_module_install) {
         # This is an ugly hack to parse any PREREQ_PM in Makefile.PL.
         if (open(CHILD, "-|") == 0) {
             eval {
@@ -989,6 +1010,17 @@ for my $file (@args) {
                 }
             }
         }
+    }
+
+    if ($use_module_install) {
+      my $makefilepl=extract($archive, $type, "$path/Makefile.PL")
+        or warn "Failed to extract $path/Makefile.PL";
+      foreach my $makefilepl_line (split m/\n/ms, $makefilepl) {
+        chomp $makefilepl_line;
+        if ($makefilepl_line =~ m/author_requires\s+['"]([:\w]+)['"]\s+=>\s+(\d+);/ms) {
+          $build_requires{$1} = $2;
+        }
+      }
     }
 
     print $spec <<END;
@@ -1113,6 +1145,14 @@ $description
 \%prep
 \%setup -q@{[($noprefix ? "" : " -n $buildpath")]}
 END
+
+    if ($use_module_install) {
+        print $spec <<'END';
+# Remove bundled libraries
+rm -fr inc
+perl -i -lne 'print $_ unless m{^inc/}' MANIFEST
+END
+    }
 
     if (@filter_requires) {
         print $spec <<'END';
