@@ -1045,6 +1045,7 @@ END
         delete $requires{perl};
     }
 
+    printf $spec "%-16s%s\n", "BuildRequires:", 'coreutils';
     if (! $usebuildpl) {
         printf $spec "%-16s%s\n", "BuildRequires:", 'make';
     }
